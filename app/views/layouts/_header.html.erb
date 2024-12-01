@@ -26,7 +26,7 @@
       </div>
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <div class="flex shrink-0 items-center">
-          <img class="h-8 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+          <%= image_tag "Trello_logo.png", class: "h-8 w-auto" %>
         </div>
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
@@ -49,6 +49,8 @@
               </svg>
               New Job
             </button>
+
+            <%= link_to "Log out", destroy_user_session_path, data: { "turbo-method": :delete}, class: "link" %>
           </div>
 
           <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
