@@ -32,6 +32,29 @@ RSpec.describe Repositories::BoardRepo do
     end
   end
 
+  describe "#get" do
+    subject(:get) { described_class.new.get(id:) }
+
+    let!(:user) { FactoryBot.create(:user) }
+
+    let!(:board) { FactoryBot.create(:board, user:) }
+
+    context "user have properties" do
+      let!(:id) { board.id }
+
+      it "returns user's properties" do
+        expect(get).to eq(board)
+      end
+    end
+
+    context "user does not have properties" do
+      let!(:id) { "test" }
+
+      it "returns user's properties" do
+        expect { get }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 
   describe "#get_by_user" do
     subject(:get_by_user) { described_class.new.get_by_user(user:) }
