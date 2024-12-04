@@ -5,6 +5,12 @@ class BoardsController < ApplicationController
     @board = Board.new
   end
 
+  def edit
+    # @board = Boards::Queries::Get.new.call(id: params[:id])
+    @board = Board.find(params[:id])
+    authorize @board
+  end
+
   def create
     result = Boards::Commands::Create.new.call(params: board_params, user: current_user)
 
