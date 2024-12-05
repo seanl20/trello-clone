@@ -84,4 +84,61 @@ RSpec.describe Repositories::BoardRepo do
       end
     end
   end
+
+  describe "#update" do
+    subject(:update) { described_class.new.update(id: board_id, attrs:) }
+
+    context "board exists" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:board) { FactoryBot.create(:board, user:) }
+
+      let(:board_id) { board.id }
+      let(:attrs) do
+        {
+          name: "Test"
+        }
+      end
+
+      it "is successful" do
+        expect(update).to be true
+
+        reloaded_board = board.reload
+        expect(reloaded_board.name).to eq("Test")
+      end
+    end
+
+    context "board does not exists" do
+      let(:board_id) { "test" }
+      let(:attrs) do
+        {}
+      end
+
+      it "is not found" do
+        expect { update }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "#delete" do
+    subject(:delete) { described_class.new.delete(id: board_id) }
+
+    context "board exists" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:board) { FactoryBot.create(:board, user:) }
+
+      let(:board_id) { board.id }
+
+      it "delete board" do
+        expect { delete }.to change { Board.count }.by(-1)
+      end
+    end
+
+    context "board does not exists" do
+      let(:board_id) { "test" }
+
+      it "is not found" do
+        expect { delete }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
