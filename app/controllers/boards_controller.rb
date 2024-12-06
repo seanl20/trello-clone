@@ -9,6 +9,10 @@ class BoardsController < ApplicationController
     authorize board
   end
 
+  def show
+    authorize board
+  end
+
   def create
     result = Boards::Commands::Create.new.call(params: board_params, user: current_user)
 

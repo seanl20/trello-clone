@@ -17,6 +17,10 @@ class BoardPolicy < ApplicationPolicy
     record.user == user
   end
 
+  def show?
+    true
+  end
+
   def update?
     edit?
   end
