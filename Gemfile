@@ -6,8 +6,7 @@ gem "devise"
 gem "dry-monads"
 gem "dry-rails", github: "dry-rb/dry-rails"
 gem "dry-struct"
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+gem "jsonapi-serializer"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 # Use postgresql as the database for Active Record
