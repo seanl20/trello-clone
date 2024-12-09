@@ -1,7 +1,14 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
+import axios from 'axios'
 
 export default class extends Controller {
+  HEADERS = { 'ACCEPT': 'application/json' }
+
   connect() {
+    axios.get('/api/boards/1/lists', { header: this.HEADERS}).then((response) => {
+      console.log("Response: ", response);
+    });
+
     const boards = [
       {
         "id"    : "board-id-1",
