@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :item do
     association :list
 
-    title { "MyString" }
+    title { Faker::Lorem.word }
   end
 end
