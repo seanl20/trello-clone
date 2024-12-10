@@ -6,9 +6,13 @@ RSpec.describe "get /api/boards/:board_id/lists", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let!(:board) { FactoryBot.create(:board, user:) }
 
-  let!(:list_1) { FactoryBot.create(:list, board:) }
-  let!(:list_2) { FactoryBot.create(:list, board:) }
-  let!(:list_3) { FactoryBot.create(:list, board:) }
+  let!(:lists) { FactoryBot.create_list(:list, 3, board:) }
+
+  let!(:items) do
+    lists.each do |list|
+      FactoryBot.create_list(:item, 2, list:)
+    end
+  end
 
   before { sign_in user }
 
@@ -16,6 +20,9 @@ RSpec.describe "get /api/boards/:board_id/lists", type: :request do
     get api_board_lists_path(board)
 
     expect(response).to have_http_status(:success)
-    expect(json["data"].count).to eq(3)
+    expect(json.dig("data").count).to eq(3)
+    json.dig("data").each do |list_data|
+      expect(list_data.dig("relationships", "items", "data").count).to eq(2)
+    end
   end
 end
