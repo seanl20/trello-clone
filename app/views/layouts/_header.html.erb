@@ -46,11 +46,20 @@
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         <% if user_signed_in? %>
           <div class="flex-shrink-0">
-            <%= link_to new_board_path, class: "relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-1 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" do %>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="-ml-1 mr-2 h-5 w-5">
-                <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"></path>
-              </svg>
-              New Board
+            <% if controller_name == "boards" && action_name == "show" %>
+              <%= link_to new_board_list_path(@board), class: "relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-1 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="-ml-1 mr-2 h-5 w-5">
+                  <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"></path>
+                </svg>
+                New List
+              <% end %>
+            <% else %>
+              <%= link_to new_board_path, class: "relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-3 py-1 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="-ml-1 mr-2 h-5 w-5">
+                  <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"></path>
+                </svg>
+                New Board
+              <% end %>
             <% end %>
           </div>
         <% else %>

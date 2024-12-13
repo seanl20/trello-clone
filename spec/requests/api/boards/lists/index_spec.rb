@@ -22,7 +22,7 @@ RSpec.describe "get /api/boards/:board_id/lists", type: :request do
     expect(response).to have_http_status(:success)
     expect(json.dig("data").count).to eq(3)
     json.dig("data").each do |list_data|
-      expect(list_data.dig("relationships", "items", "data").count).to eq(2)
+      expect(list_data.dig("attributes", "items", "data").count).to eq(2)
     end
   end
 end
