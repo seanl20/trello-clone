@@ -1,20 +1,20 @@
 <div class="bg-white mt-12 px-8 py-8 rounded-md">
-  <%= form_with model: board, local: true do |f| %>
+  <%= form_with model: [@board, @list], local: true do |f| %>
     <div class="space-y-12">
       <div class="border-b border-gray-900/10 pb-12">
-        <% if board.new_record? %>
-          <h2 class="text-base/7 font-semibold text-gray-900">New Board</h2>
-          <p class="mt-1 text-sm/6 text-gray-600">This form create a new board.</p>
+        <% if @list.new_record? %>
+          <h2 class="text-base/7 font-semibold text-gray-900">New List</h2>
+          <p class="mt-1 text-sm/6 text-gray-600">This form create a new list.</p>
         <% else %>
-          <h2 class="text-base/7 font-semibold text-gray-900">Edit Board</h2>
-          <p class="mt-1 text-sm/6 text-gray-600">This form edits a board.</p>
+          <h2 class="text-base/7 font-semibold text-gray-900">Edit List</h2>
+          <p class="mt-1 text-sm/6 text-gray-600">This form edits a list.</p>
         <% end %>
 
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div class="col-span-full">
-            <%= f.label :title, class: "block text-sm/6 font-medium text-gray-900" %>
+            <%= f.label :name, class: "block text-sm/6 font-medium text-gray-900" %>
             <div class="mt-2">
-              <%= f.text_field :title, class: "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" %>
+              <%= f.text_field :name, class: "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" %>
             </div>
           </div>
         </div>
