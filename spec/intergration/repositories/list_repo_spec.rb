@@ -32,4 +32,76 @@ RSpec.describe Repositories::ListRepo do
       end
     end
   end
+
+  describe "#create" do
+    subject(:create) { described_class.new.create(attrs:) }
+
+    let!(:user) { FactoryBot.create(:user) }
+
+    let!(:board) { FactoryBot.create(:board, user:) }
+
+    context "when valid attrs are passed" do
+      let(:attrs) do
+        {
+          title: "test",
+          board:
+        }
+      end
+
+      it "create list" do
+        expect { create }.to change { List.count }.by(1)
+      end
+    end
+
+    context "when invalid attrs are passed" do
+      let(:attrs) do
+        {
+          board:
+        }
+      end
+
+      it "does not create list" do
+        expect { create }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+  end
+
+  describe "#get" do
+    subject(:get) { described_class.new.get(id:, board:) }
+
+    let!(:user) { FactoryBot.create(:user) }
+
+    let!(:board_1) { FactoryBot.create(:board, user:) }
+    let!(:board_2) { FactoryBot.create(:board, user:) }
+
+    let!(:list_1) { FactoryBot.create(:list, board: board_1) }
+    let!(:list_2) { FactoryBot.create(:list, board: board_1) }
+
+    context "correct list id and board passed" do
+      let!(:board) { board_1 }
+      let!(:id) { list_1.id }
+
+      it "returns user's properties" do
+        expect(get).to eq(list_1)
+      end
+    end
+
+    context "correct list id and incorrect board passed" do
+      let!(:board) { board_2 }
+      let!(:id) { list_1.id }
+
+      it "returns user's properties" do
+        expect { get }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "incorrect id pass" do
+      let!(:board) { board_1 }
+      let!(:id) { "test" }
+
+      it "returns user's properties" do
+        expect { get }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
