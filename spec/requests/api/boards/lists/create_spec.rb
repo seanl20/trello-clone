@@ -1,14 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe "POST /boards/:board_id/lists", type: :request do
+RSpec.describe "POST /boards", type: :request do
   let(:user) { FactoryBot.create(:user) }
+  let!(:board) { FactoryBot.create(:board, user:) }
 
   before { sign_in user }
 
   it "succeed" do
-    post boards_path, params: {
-      board: {
-        name: "test"
+    post board_lists_path(board), params: {
+      list: {
+        title: "test"
       }
     }
 
