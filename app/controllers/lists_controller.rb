@@ -1,6 +1,8 @@
 class ListsController < ApplicationController
   before_action :authenticate_user!
 
+  protect_from_forgery with: :null_session, only: :destroy
+
   def new
     @list = board.lists.new
   end
@@ -13,6 +15,36 @@ class ListsController < ApplicationController
       redirect_to root_path
     in Failure(:invalid)
       render :new
+    end
+  end
+
+  def update
+    result = Lists::Commands::Update.new.call(id: params[:id], params: list_params, board:)
+
+    case result
+    in Success(list:)
+      redirect_to root_path
+    in Failure(:invalid)
+      render :edit
+    end
+  end
+
+  def destroy
+    result = Lists::Commands::Delete.new.call(id: params[:id])
+
+    case result
+    in Success(list:)
+      respond_to do |format|
+        format.json do
+          render json: {}, status: 204
+        end
+      end
+    in Failure(:invalid)
+      respond_to do |format|
+        format.json do
+          render json: {}, status: 204
+        end
+      end
     end
   end
 

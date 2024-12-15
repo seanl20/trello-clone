@@ -104,4 +104,63 @@ RSpec.describe Repositories::ListRepo do
       end
     end
   end
+
+  describe "#update" do
+    subject(:update) { described_class.new.update(id: list_id, attrs:) }
+
+    context "list exists" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:board) { FactoryBot.create(:board, user:) }
+      let!(:list) { FactoryBot.create(:list, board:) }
+
+      let(:list_id) { list.id }
+      let(:attrs) do
+        {
+          title: "Test"
+        }
+      end
+
+      it "is successful" do
+        expect(update).to be true
+
+        reloaded_list = list.reload
+        expect(reloaded_list.title).to eq("Test")
+      end
+    end
+
+    context "list does not exists" do
+      let(:list_id) { "test" }
+      let(:attrs) do
+        {}
+      end
+
+      it "is not found" do
+        expect { update }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "#delete" do
+    subject(:delete) { described_class.new.delete(id: list_id) }
+
+    context "board exists" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:board) { FactoryBot.create(:board, user:) }
+      let!(:list) { FactoryBot.create(:list, board:) }
+
+      let(:list_id) { list.id }
+
+      it "delete board" do
+        expect { delete }.to change { List.count }.by(-1)
+      end
+    end
+
+    context "board does not exists" do
+      let(:list_id) { "test" }
+
+      it "is not found" do
+        expect { delete }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end

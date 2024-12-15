@@ -1,8 +1,8 @@
 <div class="bg-white mt-12 px-8 py-8 rounded-md">
-  <%= form_with model: @board, local: true do |f| %>
+  <%= form_with model: board, local: true do |f| %>
     <div class="space-y-12">
       <div class="border-b border-gray-900/10 pb-12">
-        <% if @board.new_record? %>
+        <% if board.new_record? %>
           <h2 class="text-base/7 font-semibold text-gray-900">New Board</h2>
           <p class="mt-1 text-sm/6 text-gray-600">This form create a new board.</p>
         <% else %>
