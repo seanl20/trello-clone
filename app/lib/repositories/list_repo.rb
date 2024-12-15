@@ -13,5 +13,17 @@ module Repositories
         .where(board:)
         .find(id)
     end
+
+    def update(id:, attrs:)
+      List
+        .find(id)
+        .update!(attrs)
+    end
+
+    def delete(id:)
+      List
+        .find(id)
+        .destroy
+    end
   end
 end

@@ -8,9 +8,12 @@ export default class extends Controller {
 
   connect() {
     axios.get(this.element.dataset.apiUrl, { header: this.HEADERS}).then((response) => {
-      this.buildKanban(this.buildBoards(response["data"]));
+      const boards = this.buildBoards(response["data"])
+
+      const kanban = this.buildKanban(boards);
       this.cursoriftyHeaderTitles();
-      this.addLinksToHeaderTitle(this.buildBoards(response["data"]));
+      this.addLinksToHeaderTitle(boards);
+      this.addHeaderDeleteButtons(boards, kanban)
     });
   }
 
@@ -40,7 +43,7 @@ export default class extends Controller {
   }
 
   buildKanban(boards){
-    new jKanban({
+    return new jKanban({
       element: `#${this.element.id}`,
       boards: boards,
       itemAddOptions: {
@@ -52,14 +55,14 @@ export default class extends Controller {
     });
   }
 
-  getHeaderTitles() {
-    return Array.from(document.getElementsByClassName('kanban-title-board'));
-  }
-
   cursoriftyHeaderTitles() {
     this.getHeaderTitles().forEach((headerTitle) => {
       headerTitle.classList.add('cursor-pointer');
     });
+  }
+
+  getHeaderTitles() {
+    return Array.from(document.getElementsByClassName('kanban-title-board'));
   }
 
   addLinksToHeaderTitle(boards) {
@@ -69,5 +72,37 @@ export default class extends Controller {
         Turbo.visit(`${this.element.dataset.boardListsUrl}/${boards[index].id}/edit`);
       });
     });
+  }
+
+  addHeaderDeleteButtons(boards, kanban) {
+    this.getHeaders().forEach((header, index) => {
+      header.appendChild(this.buildBoardDeleteButton(boards[index].id, kanban));
+    });
+  }
+
+  getHeaders() {
+    return Array.from(document.getElementsByClassName('kanban-board-header'));
+  }
+
+  buildBoardDeleteButton(boardId, kanban) {
+    const button = document.createElement('button');
+    button.classList.add('kanban-title-button', 'btn', 'btn-default', 'btn-xs', 'mr-2');
+    button.textContent = 'x';
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      this.deleteBoard(boardId, kanban)
+    });
+    
+    return button
+  }
+
+  deleteBoard(boardId, kanban) {
+    axios.delete(`${this.element.dataset.boardListsUrl}/${boardId}`, {
+      headers: this.HEADERS
+    })
+    .then((_) => {
+      kanban.removeBoard(boardId)
+    })
   }
 }
