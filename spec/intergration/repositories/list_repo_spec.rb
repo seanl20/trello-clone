@@ -10,8 +10,8 @@ RSpec.describe Repositories::ListRepo do
     let!(:board_2) { FactoryBot.create(:board, user:) }
     let!(:board_3) { FactoryBot.create(:board, user:) }
 
-    let!(:list_1) { FactoryBot.create(:list, board: board_1) }
-    let!(:list_2) { FactoryBot.create(:list, board: board_1) }
+    let!(:list_1) { FactoryBot.create(:list, board: board_1, position: 0) }
+    let!(:list_2) { FactoryBot.create(:list, board: board_1, position: 1) }
     let!(:list_3) { FactoryBot.create(:list, board: board_2) }
 
 
@@ -19,7 +19,7 @@ RSpec.describe Repositories::ListRepo do
       let!(:board) { board_1 }
 
       it "returns board's properties" do
-        expect(get_by_board).to match_unordered_elements(list_1, list_2)
+        expect(get_by_board).to match_ordered_elements(list_1, list_2)
         expect(get_by_board).to_not include(list_3)
       end
     end

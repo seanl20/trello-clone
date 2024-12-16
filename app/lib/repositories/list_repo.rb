@@ -1,7 +1,9 @@
 module Repositories
   class ListRepo
     def get_by_board(board:)
-      List.where(board:)
+      List
+        .where(board:)
+        .order(position: :asc)
     end
 
     def create(attrs:)
