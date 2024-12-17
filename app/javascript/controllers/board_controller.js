@@ -1,10 +1,9 @@
 import { Controller } from '@hotwired/stimulus'
 import axios from 'axios'
-import { get, map, sample } from 'lodash-es'
+import { get, map } from 'lodash-es'
 
 export default class extends Controller {
   HEADERS = { 'ACCEPT': 'application/json' }
-  BACKGROUND_COLORS = ['bg-green-700', 'bg-blue-700', 'bg-red-700', 'bg-slate-700', 'bg-yellow-700']
 
   connect() {
     axios.get(this.element.dataset.apiUrl, { header: this.HEADERS}).then((response) => {
@@ -29,7 +28,7 @@ export default class extends Controller {
   }
 
   buildClassList(){
-    return `text-white, ${sample(this.BACKGROUND_COLORS)}`
+    return `text-white, bg-blue-700`
   }
 
   buildItems(items) {
@@ -57,7 +56,7 @@ export default class extends Controller {
         console.log('board.id: ', el.dataset.id);
         console.log('board.position: ', el.dataset.order -1);
 
-        axios.put(`${this.element.dataset.apiUrl}/${el.dataset.id}`, {
+        axios.put(`${this.element.dataset.listPositionApiUrl}/${el.dataset.id}`, {
           position: el.dataset.order -1
         },{
           headers: this.HEADERS
