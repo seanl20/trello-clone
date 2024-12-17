@@ -23,9 +23,10 @@ module Lists
 
       def update_list_data(lists:)
         lists.each_with_index do |list, index|
-          attrs = { position: index }
-          Repositories::ListRepo.new.update(id: list.id, attrs: Lists::Changesets::Update.map(attrs))
+          list.position = index
         end
+
+        List.import lists, on_duplicate_key_update: { conflict_target: [ :id ], columns: [ :position ] }
       end
     end
   end
