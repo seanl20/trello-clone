@@ -48,23 +48,23 @@ export default class extends Controller {
       itemAddOptions: {
         enabled: true
       },
-      buttonClick: () => {
-        console.log('Board Clicked');
+      buttonClick: (el, boardId) => {
+        Turbo.visit(`/boards/${this.element.dataset.boardId}/lists/${boardId}/items/new`)
       },
       dragendBoard: (el) => {
-        console.log('dragendBoard.el: ', el);
-        console.log('board.id: ', el.dataset.id);
-        console.log('board.position: ', el.dataset.order -1);
-
-        axios.put(`${this.element.dataset.listPositionApiUrl}/${el.dataset.id}`, {
-          position: el.dataset.order -1
-        },{
-          headers: this.HEADERS
-        })
-        .then((response) => {
-          console.log('reponse: ', response)
-        });
+        this.updateListPosition(el);
       }
+    });
+  }
+
+  updateListPosition(el) {
+    axios.put(`${this.element.dataset.listPositionApiUrl}/${el.dataset.id}`, {
+      position: el.dataset.order -1
+    },{
+      headers: this.HEADERS
+    })
+    .then((response) => {
+      console.log('reponse: ', response)
     });
   }
 

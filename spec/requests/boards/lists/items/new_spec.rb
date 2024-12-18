@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "PUT /boards/:id", type: :request do
+RSpec.describe "GET /boards/:board_id/lists/:list_id/items/new", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let!(:board) { FactoryBot.create(:board, user:) }
   let!(:list) { FactoryBot.create(:list, board:) }
@@ -8,12 +8,8 @@ RSpec.describe "PUT /boards/:id", type: :request do
   before { sign_in user }
 
   it "succeed" do
-    put board_list_path(board, list), params: {
-      list: {
-        title: "test"
-      }
-    }
+    get new_board_list_item_path(board, list)
 
-    expect(response).to have_http_status(:redirect)
+    expect(response).to have_http_status(:success)
   end
 end

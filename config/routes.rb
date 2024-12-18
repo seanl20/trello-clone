@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index"
 
   resources :boards do
-    resources :lists, except: :show
+    resources :lists, except: :show do
+      resources :items
+    end
   end
 
   namespace :api do

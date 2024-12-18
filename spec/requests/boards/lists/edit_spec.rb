@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "DELETE /boards/:id", type: :request do
+RSpec.describe "GET 	/boards/:board_id/lists/:id/edit", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let!(:board) { FactoryBot.create(:board, user:) }
   let!(:list) { FactoryBot.create(:list, board:) }
@@ -8,7 +8,7 @@ RSpec.describe "DELETE /boards/:id", type: :request do
   before { sign_in user }
 
   it "succeed" do
-    delete board_list_path(board, list), headers: { 'ACCEPT': 'application/json' }
+    get edit_board_list_path(board, list)
 
     expect(response).to have_http_status(:success)
   end

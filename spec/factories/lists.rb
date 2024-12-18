@@ -3,6 +3,9 @@ FactoryBot.define do
     association :board
 
     title { Faker::Lorem.word }
-    position { 0 }
+
+    sequence :position do |n|
+      n
+    end
   end
 end
