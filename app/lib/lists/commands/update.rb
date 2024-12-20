@@ -6,19 +6,13 @@ module Lists
       def call(id:, params:, board:)
         yield update_list(id:, attrs: Lists::Changesets::Update.map(params))
 
-        Success(list: list_repo.get(id:, board:))
+        Success(:success)
       end
 
       def update_list(id:, attrs:)
-        Success(list_repo.update(id:, attrs:))
+        Success(Repositories::ListRepo.new.update(id:, attrs:))
       rescue ActiveRecord::RecordInvalid
         Failure(:invalid)
-      end
-
-      private
-
-      def list_repo
-        Repositories::ListRepo.new
       end
     end
   end

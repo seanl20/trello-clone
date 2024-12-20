@@ -56,20 +56,14 @@ export default class extends Controller {
         this.updateListPosition(el);
       },
       dropEl: (el, target, source, sibling) => {
-        const targetItems = Array.from(target.getElementsByClassName('kanban-item'));
-        const sourceItems = Array.from(source.getElementsByClassName('kanban-item'));
+        const targetItems = this.updateTargetDom(target);
+        const sourceItems = this.updateSourceDom(source);
 
-        targetItems.forEach((item, index) => {
-          item.dataset.position = index;
-          item.dataset.listId = target.closest('.kanban-board').dataset.id;
-        });
+        const targetItemData = this.generateItemData(targetItems);
+        const sourceItemData = this.generateItemData(sourceItems);
 
-        sourceItems.forEach((item, index) => {
-          item.dataset.position = index;
-          item.dataset.listId = source.closest('.kanban-board').dataset.id;
-        });
-
-
+        this.updateItemApiCall(targetItemData);
+        this.updateItemApiCall(sourceItemData);
       }
     });
   }
@@ -82,6 +76,48 @@ export default class extends Controller {
     })
     .then((response) => {
       console.log('reponse: ', response)
+    });
+  }
+
+  updateTargetDom(target) {
+    const targetItems = Array.from(target.getElementsByClassName('kanban-item'));
+
+    targetItems.forEach((item, index) => {
+      item.dataset.position = index;
+      item.dataset.listId = target.closest('.kanban-board').dataset.id;
+    });
+
+    return targetItems;
+  }
+
+  updateSourceDom(source) {
+    const sourceItems = Array.from(source.getElementsByClassName('kanban-item'));
+
+    sourceItems.forEach((item, index) => {
+      item.dataset.position = index;
+      item.dataset.listId = source.closest('.kanban-board').dataset.id;
+    });
+
+    return sourceItems;
+  }
+
+  generateItemData(items) {
+    return map(items, (item) => {
+      return {
+        id: item.dataset.eid,
+        position: item.dataset.position,
+        list_id: item.dataset.listId
+      }
+    })
+  }
+
+  updateItemApiCall(itemData) {
+    axios.put(`${this.element.dataset.itemPositionApiUrl}`, {
+      items: itemData
+    },{
+      headers: this.HEADERS
+    })
+    .then((response) => {
     });
   }
 

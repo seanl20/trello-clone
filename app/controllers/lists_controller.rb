@@ -11,7 +11,7 @@ class ListsController < ApplicationController
     result = Lists::Commands::Create.new.call(params: list_params, board:)
 
     case result
-    in Success(list)
+    in Success(:success)
       redirect_to root_path
     in Failure(:invalid)
       render :new
@@ -22,7 +22,7 @@ class ListsController < ApplicationController
     result = Lists::Commands::Update.new.call(id: params[:id], params: list_params, board:)
 
     case result
-    in Success(list:)
+    in Success(:success)
       redirect_to root_path
     in Failure(:invalid)
       render :edit
@@ -33,7 +33,7 @@ class ListsController < ApplicationController
     result = Lists::Commands::Delete.new.call(id: params[:id])
 
     case result
-    in Success(list:)
+    in Success(:success)
       respond_to do |format|
         format.json do
           render json: {}, status: 204

@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
     result = Items::Commands::Create.new.call(params: item_params, list:)
 
     case result
-    in Success(item)
+    in Success(:success)
       redirect_to root_path
     in Failure(:invalid)
       render :new

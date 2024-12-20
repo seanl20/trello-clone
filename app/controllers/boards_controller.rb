@@ -17,7 +17,7 @@ class BoardsController < ApplicationController
     result = Boards::Commands::Create.new.call(params: board_params, user: current_user)
 
     case result
-    in Success(board:)
+    in Success(:success)
       redirect_to root_path
     in Failure(:invalid)
       render :new
@@ -29,7 +29,7 @@ class BoardsController < ApplicationController
     result = Boards::Commands::Update.new.call(id: params[:id], params: board_params)
 
     case result
-    in Success(board:)
+    in Success(:success)
       redirect_to root_path
     in Failure(:invalid)
       render :edit
@@ -42,7 +42,7 @@ class BoardsController < ApplicationController
     result = Boards::Commands::Delete.new.call(id: params[:id])
 
     case result
-    in Success(board:)
+    in Success(:success)
       redirect_to root_path
     in Failure(:invalid)
       redirect_to root_path

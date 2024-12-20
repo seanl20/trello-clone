@@ -4,9 +4,9 @@ module Lists
   module Commands
     class Delete < Command
       def call(id:)
-        list = yield delete_list(id:)
+        yield delete_list(id:)
 
-        Success(list:)
+        Success(:success)
       end
 
       def delete_list(id:)

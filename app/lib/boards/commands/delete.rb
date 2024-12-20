@@ -4,9 +4,9 @@ module Boards
   module Commands
     class Delete < Command
       def call(id:)
-        board = yield delete_board(id:)
+        yield delete_board(id:)
 
-        Success(board:)
+        Success(:success)
       end
 
       def delete_board(id:)
