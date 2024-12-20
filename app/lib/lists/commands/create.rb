@@ -7,9 +7,9 @@ module Lists
         position = get_lastest_list_position(board:)
         attrs = Lists::Changesets::Create.map(params).merge({ board:, position: })
 
-        list = yield create_list(attrs:)
+        yield create_list(attrs:)
 
-        Success(list:)
+        Success(:success)
       end
 
       def create_list(attrs:)

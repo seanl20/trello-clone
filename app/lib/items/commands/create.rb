@@ -6,9 +6,9 @@ module Items
       def call(params:, list:)
         attrs = Items::Changesets::Create.map(params).merge({ list: })
 
-        items = yield create_items(attrs:)
+        yield create_items(attrs:)
 
-        Success(items:)
+        Success(:success)
       end
 
       def create_items(attrs:)

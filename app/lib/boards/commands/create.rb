@@ -6,9 +6,9 @@ module Boards
       def call(params:, user:)
         attrs = Boards::Changesets::Create.map(params).merge({ user: })
 
-        board = yield create_board(attrs:)
+        yield create_board(attrs:)
 
-        Success(board:)
+        Success(:success)
       end
 
       def create_board(attrs:)
