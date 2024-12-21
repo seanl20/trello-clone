@@ -64,6 +64,9 @@ export default class extends Controller {
 
         this.updateItemApiCall(targetItemData);
         this.updateItemApiCall(sourceItemData);
+      },
+      click: (el) => {
+        document.getElementById('show-modal-div').click();
       }
     });
   }
