@@ -66,7 +66,8 @@ export default class extends Controller {
         this.updateItemApiCall(sourceItemData);
       },
       click: (el) => {
-        document.getElementById('show-modal-div').click();
+        this.showModal();
+        this.populateItemInformation(el.dataset.eid);
       }
     });
   }
@@ -121,6 +122,17 @@ export default class extends Controller {
       headers: this.HEADERS
     })
     .then((response) => {
+    });
+  }
+
+  showModal(){
+    document.getElementById('show-modal-div').click();
+  }
+
+  populateItemInformation(item_id){
+    axios.get(`/api/items/${item_id}`, { header: this.HEADERS}).then((response) => {
+      document.getElementById('item-title').textContent = get(response, 'data.data.attributes.title')
+      document.getElementById('item-description').textContent = get(response, 'data.data.attributes.description')
     });
   }
 

@@ -18,5 +18,9 @@ module Repositories
 
       Item.import items, on_duplicate_key_update: { conflict_target: [ :id ], columns: [ :position, :list_id ] }
     end
+
+    def get(id:)
+      Item.find(id)
+    end
   end
 end
