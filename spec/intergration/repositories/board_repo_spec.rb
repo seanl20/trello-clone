@@ -39,18 +39,18 @@ RSpec.describe Repositories::BoardRepo do
 
     let!(:board) { FactoryBot.create(:board, user:) }
 
-    context "user have properties" do
+    context "board exists" do
       let!(:id) { board.id }
 
-      it "returns user's properties" do
+      it "returns board" do
         expect(get).to eq(board)
       end
     end
 
-    context "user does not have properties" do
+    context "board does not exists" do
       let!(:id) { "test" }
 
-      it "returns user's properties" do
+      it "returns not found error" do
         expect { get }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end

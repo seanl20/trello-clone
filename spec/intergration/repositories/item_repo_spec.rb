@@ -100,4 +100,29 @@ RSpec.describe Repositories::ItemRepo do
       end
     end
   end
+
+  describe "#get" do
+    subject(:get) { described_class.new.get(id:) }
+
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:board) { FactoryBot.create(:board, user:) }
+    let!(:list) { FactoryBot.create(:list, board:) }
+    let!(:item) { FactoryBot.create(:item, list:) }
+
+    context "item exists" do
+      let!(:id) { item.id }
+
+      it "returns item" do
+        expect(get).to eq(item)
+      end
+    end
+
+    context "item does not exists" do
+      let!(:id) { "test" }
+
+      it "returns not found error" do
+        expect { get }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
