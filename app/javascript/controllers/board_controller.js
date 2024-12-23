@@ -67,7 +67,7 @@ export default class extends Controller {
       },
       click: (el) => {
         this.showModal();
-        this.populateItemInformation(el.dataset.eid);
+        this.populateItemInformation(el.dataset.eid, this.element.dataset.boardId);
       }
     });
   }
@@ -129,10 +129,12 @@ export default class extends Controller {
     document.getElementById('show-modal-div').click();
   }
 
-  populateItemInformation(item_id){
+  populateItemInformation(item_id, boardId){
     axios.get(`/api/items/${item_id}`, { header: this.HEADERS}).then((response) => {
-      document.getElementById('item-title').textContent = get(response, 'data.data.attributes.title')
-      document.getElementById('item-description').textContent = get(response, 'data.data.attributes.description')
+      document.getElementById('item-title').textContent = get(response, 'data.data.attributes.title');
+      document.getElementById('item-description').textContent = get(response, 'data.data.attributes.description');
+      document.getElementById('item-edit-link').href = `/boards/${boardId}/lists/${get(response, 'data.data.attributes.list_id')}/items/${item_id}/edit`;
+      document.getElementById('item-delete-link').href = `/boards/${boardId}/lists/${get(response, 'data.data.attributes.list_id')}/items/${item_id}`;
     });
   }
 

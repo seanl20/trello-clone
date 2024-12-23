@@ -19,4 +19,11 @@
       @apply text-blue-900
     }
   }
+
+  .deletelink {
+    @apply text-red-400 tracking-wide;
+    &:hover {
+      @apply text-red-900
+    }
+  }
 }

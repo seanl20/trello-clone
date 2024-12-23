@@ -143,19 +143,19 @@ RSpec.describe Repositories::ListRepo do
   describe "#delete" do
     subject(:delete) { described_class.new.delete(id: list_id) }
 
-    context "board exists" do
+    context "list exists" do
       let!(:user) { FactoryBot.create(:user) }
       let!(:board) { FactoryBot.create(:board, user:) }
       let!(:list) { FactoryBot.create(:list, board:) }
 
       let(:list_id) { list.id }
 
-      it "delete board" do
+      it "delete list" do
         expect { delete }.to change { List.count }.by(-1)
       end
     end
 
-    context "board does not exists" do
+    context "list does not exists" do
       let(:list_id) { "test" }
 
       it "is not found" do
