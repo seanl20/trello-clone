@@ -22,5 +22,23 @@ module Repositories
     def get(id:)
       Item.find(id)
     end
+
+    def get_by_list(id:, list:)
+      Item
+        .where(list:)
+        .find(id)
+    end
+
+    def update(id:, attrs:)
+      Item
+        .find(id)
+        .update!(attrs)
+    end
+
+    def delete(id:)
+      Item
+        .find(id)
+        .destroy
+    end
   end
 end

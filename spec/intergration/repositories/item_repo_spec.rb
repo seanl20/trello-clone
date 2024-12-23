@@ -125,4 +125,109 @@ RSpec.describe Repositories::ItemRepo do
       end
     end
   end
+
+  describe "#get_by_list" do
+    subject(:get_by_list) { described_class.new.get_by_list(id:, list:) }
+
+    let!(:user) { FactoryBot.create(:user) }
+
+    let!(:board) { FactoryBot.create(:board, user:) }
+
+    let!(:list_1) { FactoryBot.create(:list, board:) }
+    let!(:list_2) { FactoryBot.create(:list, board:) }
+
+    let!(:item_1) { FactoryBot.create(:item, list: list_1) }
+    let!(:item_2) { FactoryBot.create(:item, list: list_1) }
+    let!(:item_3) { FactoryBot.create(:item, list: list_2) }
+
+    context "correct item id and list passed" do
+      let!(:list) { list_1 }
+      let!(:id) { item_1.id }
+
+      it "returns item" do
+        expect(get_by_list).to eq(item_1)
+      end
+    end
+
+    context "correct item id and incorrect list passed" do
+      let!(:list) { list_2 }
+      let!(:id) { item_1.id }
+
+      it "returns not found" do
+        expect { get_by_list }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "incorrect item id pass" do
+      let!(:list) { list_1 }
+      let!(:id) { "test" }
+
+      it "returns not found" do
+        expect { get_by_list }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "#update" do
+    subject(:update) { described_class.new.update(id: item_id, attrs:) }
+
+    context "item exists" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:board) { FactoryBot.create(:board, user:) }
+      let!(:list) { FactoryBot.create(:list, board:) }
+      let!(:item) { FactoryBot.create(:item, list:) }
+
+      let(:item_id) { item.id }
+      let(:attrs) do
+        {
+          title: "Test",
+          description: "Description"
+        }
+      end
+
+      it "is successful" do
+        expect(update).to be true
+
+        reloaded_item = item.reload
+        expect(reloaded_item.title).to eq("Test")
+        expect(reloaded_item.description).to eq("Description")
+      end
+    end
+
+    context "list does not exists" do
+      let(:item_id) { "test" }
+      let(:attrs) do
+        {}
+      end
+
+      it "is not found" do
+        expect { update }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "#delete" do
+    subject(:delete) { described_class.new.delete(id: item_id) }
+
+    context "item exists" do
+      let!(:user) { FactoryBot.create(:user) }
+      let!(:board) { FactoryBot.create(:board, user:) }
+      let!(:list) { FactoryBot.create(:list, board:) }
+      let!(:item) { FactoryBot.create(:item, list:) }
+
+      let(:item_id) { item.id }
+
+      it "delete item" do
+        expect { delete }.to change { Item.count }.by(-1)
+      end
+    end
+
+    context "item does not exists" do
+      let(:item_id) { "test" }
+
+      it "is not found" do
+        expect { delete }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end

@@ -17,9 +17,39 @@ class ItemsController < ApplicationController
   end
 
   def edit
+    board
+    list
+    @item = Items::Queries::GetByList.new.call(item_id: params[:id], list:)
   end
 
   def update
+    result = Items::Commands::Update.new.call(id: params[:id], params: item_params)
+
+    case result
+    in Success(:success)
+      redirect_to root_path
+    in Failure(:invalid)
+      render :edit
+    end
+  end
+
+  def destroy
+    result = Items::Commands::Delete.new.call(id: params[:id])
+
+    case result
+    in Success(:success)
+      respond_to do |format|
+        format.json do
+          render json: {}, status: 204
+        end
+      end
+    in Failure(:invalid)
+      respond_to do |format|
+        format.json do
+          render json: {}, status: 204
+        end
+      end
+    end
   end
 
   private
