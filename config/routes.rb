@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resources :lists, except: :show do
       resources :items
     end
+    resources :board_users, only: [ :new, :create ]
   end
 
   namespace :api do
