@@ -135,6 +135,20 @@ export default class extends Controller {
       document.getElementById('item-description').textContent = get(response, 'data.data.attributes.description');
       document.getElementById('item-edit-link').href = `/boards/${boardId}/lists/${get(response, 'data.data.attributes.list_id')}/items/${item_id}/edit`;
       document.getElementById('item-delete-link').href = `/boards/${boardId}/lists/${get(response, 'data.data.attributes.list_id')}/items/${item_id}`;
+      document.getElementById('item-assign-member-link').href = `/boards/${boardId}/lists/${get(response, 'data.data.attributes.list_id')}/items/${item_id}/item_members/new`;
+
+      const membersList = map(get(response, 'data.data.attributes.members.data'), (memberData) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = get(memberData, 'attributes.email')
+        return listItem;
+      });
+
+      console.log('membersList: ', membersList);
+      document.getElementById('item-member-list').innerHTML = null;
+
+      membersList.forEach((memberList) => {
+        document.getElementById('item-member-list').appendChild(memberList);
+      });
     });
   }
 
