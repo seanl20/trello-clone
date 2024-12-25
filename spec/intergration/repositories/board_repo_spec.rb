@@ -190,4 +190,23 @@ RSpec.describe Repositories::BoardRepo do
       end
     end
   end
+
+  describe "#board_members" do
+    subject(:board_members) { described_class.new.board_members(board:) }
+
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:board) { FactoryBot.create(:board, user:) }
+
+    let!(:user_1) { FactoryBot.create(:user) }
+    let!(:user_2) { FactoryBot.create(:user) }
+    let!(:user_3) { FactoryBot.create(:user) }
+
+    let!(:board_user_1) { FactoryBot.create(:board_user, board:, user: user_1) }
+    let!(:board_user_2) { FactoryBot.create(:board_user, board:, user: user_2) }
+    let!(:board_user_3) { FactoryBot.create(:board_user, board:, user: user_3) }
+
+    it "returns board" do
+      expect(board_members).to match_unordered_elements(user, user_1, user_2, user_3)
+    end
+  end
 end

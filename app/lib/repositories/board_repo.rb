@@ -33,9 +33,13 @@ module Repositories
 
       BoardUser.where(board:, user_id: user_ids_to_destory).delete_all
 
-      users_to_assign = User.where(id: user_ids)
+      users_to_assign = User.where(id: user_ids).where.not(id: board.reload.members.ids)
 
       board.members << users_to_assign
+    end
+
+    def board_members(board:)
+      board.members.uniq
     end
   end
 end

@@ -5,10 +5,6 @@ class BoardUsersController < ApplicationController
     @board_user, @users = BoardUsers::Queries::NewBoardUser.new.call(board:)
   end
 
-  def edit
-    authorize board
-  end
-
   def create
     BoardUsers::Commands::UpdateMembers.new.call(id: params[:board_id], params: board_user_params)
 

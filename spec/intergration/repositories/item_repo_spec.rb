@@ -230,4 +230,57 @@ RSpec.describe Repositories::ItemRepo do
       end
     end
   end
+
+  describe "#update_members" do
+    subject(:update_members) { described_class.new.update_members(id: item_id, user_ids:) }
+
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:board) { FactoryBot.create(:board, user: user) }
+    let!(:list) { FactoryBot.create(:list, board:) }
+
+    context "item exists" do
+      context "Adding new members" do
+        let!(:item) { FactoryBot.create(:item, list:) }
+        let!(:user_1) { FactoryBot.create(:user) }
+        let!(:user_2) { FactoryBot.create(:user) }
+        let!(:user_3) { FactoryBot.create(:user) }
+
+        let(:item_id) { item.id }
+        let(:user_ids) { [ user_1.id, user_2.id, user_3.id ] }
+
+        it "update item members" do
+          update_members
+
+          expect(item.reload.members).to match_unordered_elements(user_1, user_2, user_3)
+        end
+      end
+
+      context "removing old members" do
+        let!(:user_1) { FactoryBot.create(:user) }
+        let!(:user_2) { FactoryBot.create(:user) }
+        let!(:user_3) { FactoryBot.create(:user) }
+        let!(:item) { FactoryBot.create(:item, list:) }
+        let!(:item_member_1) { FactoryBot.create(:item_member, item:, user: user_2) }
+        let!(:item_member_2) { FactoryBot.create(:item_member, item:, user: user_3) }
+
+        let(:item_id) { item.id }
+        let(:user_ids) { [] }
+
+        it "update item members" do
+          update_members
+
+          expect(item.reload.members).to be_empty
+        end
+      end
+    end
+
+    context "board does not exists" do
+      let(:item_id) { "test" }
+      let(:user_ids) { [] }
+
+      it "is not found" do
+        expect { update_members }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
